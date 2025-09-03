@@ -9,14 +9,14 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    @layer utilities {
-      .text-glow-red {
-        text-shadow:
-          0 0 5px rgba(239, 68, 68, 0.8),
-          0 0 10px rgba(239, 68, 68, 0.6),
-          0 0 20px rgba(239, 68, 68, 0.4);
-      }
+  @layer utilities {
+    .text-glow-red {
+      text-shadow:
+        0 0 5px rgba(239, 68, 68, 0.8),
+        0 0 10px rgba(239, 68, 68, 0.6),
+        0 0 20px rgba(239, 68, 68, 0.4);
     }
+  }
   </style>
 </head>
 

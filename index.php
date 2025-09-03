@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . "/models/Model.php";
+require __DIR__ . "/Controller.php";
 
 try {
   if (isset($_GET['search'])) {
@@ -10,11 +10,13 @@ try {
     require __DIR__ . '/views/Rooms.php';
   } else if (isset($_GET['new_hotel'])) {
     require __DIR__ . '/views/NewHotel.php';
+  } else if (isset($_GET['id'])) {
+    if (intval($_GET['id'] != 0)) {
+      hotel(intval($_GET['id']));
+    }
   } else {
-    $hotels = getHotels();
-    require __DIR__ . '/views/Home.php';
+    home();
   }
 } catch (Exception $e) {
-  $msgError = $e->getMessage();
-  require __DIR__ . '/views/Error.php';
+  error($e);
 }

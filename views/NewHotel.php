@@ -10,7 +10,7 @@
     class="rounded bg-white text-black p-2 outline-none focus:ring-4 focus:border-transparent focus:ring-blue-400">
   <button type="submit" class="bg-blue-500 w-1/2 mx-auto mt-10 py-5 rounded">Create</button>
   <?php if (!empty($info)) { ?>
-    <p class="text-red-400 mt-4 text-glow-red"><?= $info ?></p>
+  <p class="text-red-400 mt-4 text-glow-red"><?= $info ?></p>
   <?php } ?>
 </form>
 <?php $content = ob_get_clean() ?>
