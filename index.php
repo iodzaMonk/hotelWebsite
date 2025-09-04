@@ -6,44 +6,20 @@ require __DIR__ . "/Controller/Controller.php";
 try {
   $deleted = false;
   $created = false;
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     // DELETE HOTEL
-    if (isset($_POST['action']) && "delete_hotel" === $_POST['action']) {
-      $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
-      if ($id > 0) {
-        $deleted = deleteHotel($id);
-        if ($deleted === true) {
-          home($deleted);
-          exit;
-        }
-      } else {
-        error("Invalid ID for deletion form!");
-        exit;
-      }
+    if ("delete_hotel" === $_POST['action']) {
+      delete(isset($_POST['id']) ? intval($_POST['id']) : 0, $deleted);
     }
-
 
     // CREATE HOTEL
-    $name = $_POST['name'] ?? null;
-    $address = $_POST['address'] ?? null;
-
-    if ($name && $address) {
-      $created = addHotel($name, $address);
-      if ($created) {
-        $info = "Hotel added successfully!";
-      }
-    } else {
-      $info = "Please fill out all fields.";
+    if ("add_hotel" === $_POST['action']) {
+      create($created, $_POST['name'] ?? null, $_POST['address'] ?? null);
     }
-    home(null, $created);
-    exit;
   }
 
   if (isset($_GET['search'])) {
-    $name = $_GET['search'];
-    $hotels = getHotelsByName($name);
-    require __DIR__ . '/Views/Home.php';
-    exit;
+    search($_GET['search']);
   }
 
   if (isset($_GET['new_hotel'])) {
@@ -57,6 +33,7 @@ try {
       exit;
     }
   }
+
   home();
 } catch (Exception $e) {
   error($e);

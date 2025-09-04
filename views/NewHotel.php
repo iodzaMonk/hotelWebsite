@@ -3,6 +3,7 @@
 <?php ob_start(); ?>
 <form action="index.php" method="post" class="flex flex-col">
   <label for="name" class="text-2xl my-2">Name</label>
+  <input type="hidden" name="action" value="add_hotel">
   <input type="text" name="name" id="name"
     class="rounded bg-white text-black p-2 focus:border-opacity-0 outline-none focus:ring-4 focus:border-transparent focus:ring-blue-400">
   <label for="address" class="text-2xl my-2">Address</label>
