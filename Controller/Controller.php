@@ -17,6 +17,14 @@ function home(?bool $del = null, ?bool $created = null)
   require __DIR__ . '/../Views/Home.php';
 }
 
+function createHotel($name, $address){
+  $created = addHotel($name, $address);
+  if ($created) {
+        $info = "Hotel added successfully!";
+      } else {
+        $info = "Something went wrong";
+      }
+}
 
 function hotel($id)
 {

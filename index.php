@@ -28,10 +28,8 @@ try {
     $address = $_POST['address'] ?? null;
 
     if ($name && $address) {
-      $created = addHotel($name, $address);
-      if ($created) {
-        $info = "Hotel added successfully!";
-      }
+      $created = createHotel($name, $address);
+
     } else {
       $info = "Please fill out all fields.";
     }
