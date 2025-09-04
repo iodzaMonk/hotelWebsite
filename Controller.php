@@ -2,8 +2,17 @@
 
 require __DIR__ . "/models/Model.php";
 
-function home()
+function home(?bool $del = null, ?bool $created = null)
 {
+  $crea = null;
+  $deleted = null;
+  if ($del) {
+    $deleted = true;
+  }
+
+  if ($created) {
+    $crea = true;
+  }
   $hotels = getHotels();
   require __DIR__ . '/views/Home.php';
 }

@@ -15,6 +15,22 @@ function getRooms($id_hotel)
   return $stmt;
 }
 
+function addHotel($name, $address)
+{
+  $pdo = getBdd();
+  $stmt = $pdo->prepare("INSERT INTO hotels (hotel_name, hotel_address) VALUES (?, ?)");
+  $stmt->execute([$name, $address]);
+  return $stmt->rowCount() === 1;
+}
+
+function deleteHotel($id)
+{
+  $pdo = getBdd();
+  $stmt = $pdo->prepare("DELETE FROM hotels WHERE id=?");
+  $stmt->execute([$id]);
+  return $stmt->rowCount() === 1;
+}
+
 function getHotels_by_id($id)
 {
   $bdd = getBdd();
