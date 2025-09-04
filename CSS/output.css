@@ -312,8 +312,8 @@
   .h-10 {
     height: calc(var(--spacing) * 10);
   }
-  .h-\[30px\] {
-    height: 30px;
+  .h-\[25px\] {
+    height: 25px;
   }
   .h-full {
     height: 100%;

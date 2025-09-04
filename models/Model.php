@@ -43,6 +43,18 @@ function getHotels_by_id($id)
   }
 }
 
+function getHotelsByName($name)
+{
+  $bdd = getBdd();
+  $hotels = $bdd->prepare("SELECT id, hotel_name, hotel_address FROM hotels WHERE hotel_name LIKE ?");
+  $hotels->execute(array($name));
+  if ($hotels->rowCount() >= 1) {
+    return $hotels;
+  } else {
+    throw new Exception("No hotel with the given name were found: '$name'");
+  }
+}
+
 function getBdd()
 {
   $bdd = new PDO('mysql:host=localhost;dbname=hotels;charset=utf8', 'root', 'mysql', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
