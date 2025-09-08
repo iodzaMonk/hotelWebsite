@@ -80,6 +80,16 @@
       </div>
     </footer>
   </div>
+
+  <script>
+    function closeModal() {
+      const root = document.getElementById('popup');
+      if (!root) return;
+      root.style.opacity = '0';
+      root.style.transition = 'opacity 200ms ease';
+      setTimeout(() => root.remove(), 200);
+    }
+  </script>
 </body>
 
 </html>

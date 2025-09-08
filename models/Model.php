@@ -10,7 +10,7 @@ function getHotels()
 function getRooms($id_hotel)
 {
   $bdd = getBdd();
-  $stmt = $bdd->prepare('SELECT room_nb, room_type FROM rooms WHERE hotel_id=?');
+  $stmt = $bdd->prepare('SELECT id, room_nb, room_type FROM rooms WHERE hotel_id=?');
   $stmt->execute(array($id_hotel));
   return $stmt;
 }
@@ -41,6 +41,22 @@ function getHotels_by_id($id)
   } else {
     throw new Exception("No hotels match the given id: '$id'");
   }
+}
+
+function addRoom($id, $roomNb, $roomType)
+{
+  $pdo = getBdd();
+  $stmt = $pdo->prepare("INSERT INTO rooms (hotel_id, room_nb, room_type) VALUES (?, ?, ?)");
+  $stmt->execute([$id, $roomNb, $roomType]);
+  return $stmt->rowCount() === 1;
+}
+
+function deleteRoom($id)
+{
+  $pdo = getBdd();
+  $stmt = $pdo->prepare("DELETE FROM rooms WHERE id=?");
+  $stmt->execute([$id]);
+  return $stmt->rowCount() === 1;
 }
 
 function getHotelsByName($name)
