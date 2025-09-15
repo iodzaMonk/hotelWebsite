@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="stylesheet" href="./CSS/output.css">
+  <link rel="stylesheet" href="<?= $rootWeb ?>CSS/output.css">
   <title><?= $title ?></title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,7 +27,7 @@
       <div class="max-w-5xl mx-auto px-4 py-6 flex items-center justify-between">
         <!-- Logo + Title -->
         <div class="flex flex-col">
-          <a href="index.php" class="group inline-flex items-baseline gap-3">
+          <a href="<?= $rootWeb ?>index.php" class="group inline-flex items-baseline gap-3">
             <svg viewBox="-1.5 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor" stroke="currentColor"
               class="h-[25px] text-white my-auto">
@@ -54,6 +54,8 @@
         </div>
         <!-- Search bar -->
         <form action="index.php" method="get" class="flex items-center gap-2">
+          <input type="hidden" name="controller" value="hotel">
+          <input type="hidden" name="action" value="search">
           <input name="search" id="searching_bar" placeholder="Search hotel by name"
             class="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm resize-none w-64 h-10 outline-0 focus:ring-2 focus:ring-cyan-500 transition-all ease-out duration-500 " />
         </form>
