@@ -8,16 +8,21 @@ if (isset($rooms)) {
     $roomsList = iterator_to_array($rooms);
   }
 }
+$statusType = null;
+if (!empty($deleted)) {
+  $statusType = 'deleted';
+} elseif (!empty($created)) {
+  $statusType = 'created';
+} elseif (!empty($restored)) {
+  $statusType = 'restored';
+}
 ?>
 
-<?php if (!empty($deleted) || !empty($created)) {
-
-  $type = !empty($deleted) ? 'deleted' : 'created';
-
+<?php if ($statusType !== null) {
   $modal = [
     'deleted' => [
       'title' => 'Deleted successfully',
-      'desc' => 'The room is gone.',
+      'desc' => 'The room was removed.',
       'icon' => 'text-red-500',
       'accent' => 'border-red-500/40'
     ],
@@ -27,7 +32,13 @@ if (isset($rooms)) {
       'icon' => 'text-cyan-500',
       'accent' => 'border-cyan-500/40'
     ],
-  ][$type];
+    'restored' => [
+      'title' => 'Room restored',
+      'desc' => 'The deleted room is back on the list.',
+      'icon' => 'text-emerald-500',
+      'accent' => 'border-emerald-500/40'
+    ],
+  ][$statusType];
   ?>
   <div id="popup" class="fixed inset-0 z-50 flex items-center justify-center">
     <button type="button" onclick="closeModal()" class="absolute inset-0 bg-black/60"></button>
@@ -44,13 +55,13 @@ if (isset($rooms)) {
       <div class="flex items-start gap-4">
         <div
           class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 border <?= $modal['accent'] ?>">
-          <?php if ($type === 'deleted'): ?>
+          <?php if ($statusType === 'deleted'): ?>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 <?= $modal['icon'] ?>" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
           <?php else: ?>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 <?= $modal['icon'] ?>" viewBox=" 0 0 24 24" fill="none"
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 <?= $modal['icon'] ?>" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
             </svg>
@@ -72,6 +83,18 @@ if (isset($rooms)) {
   <p class="mt-6 rounded border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300 text-center">
     <?= $error ?>
   </p>
+<?php endif; ?>
+
+<?php if (!empty($undo)): ?>
+  <form action="<?= Configuration::get('rootWeb', '/') ?>AdminRoom/restore" method="post"
+    class="mt-4 flex flex-wrap items-center justify-center gap-3 m-5">
+    <input type="hidden" name="id" value="<?= $hotel['id'] ?>">
+    <p class="text-sm text-gray-300">Deleted something by mistake? You can bring back the last room.</p>
+    <button type="submit"
+      class="rounded-lg border border-emerald-400/60 px-4 py-2 text-sm font-medium text-emerald-200 transition hover:bg-emerald-500/10 hover:ring-1 hover:ring-emerald-400/50">
+      Undo last delete
+    </button>
+  </form>
 <?php endif; ?>
 
 <div
@@ -110,8 +133,10 @@ if (isset($rooms)) {
             <p>Room nb: <span class="font-bold italic text-cyan-600">
                 <?= $room['room_nb'] ?></span>
             </p>
-            <form action="<?= Configuration::get('rootWeb', '/') ?>AdminRoom/delete/<?= $room['id'] ?>/<?= $hotel['id'] ?>"
-              method="post" class="mt-3">
+            <form action="<?= Configuration::get('rootWeb', '/') ?>AdminRoom/delete/<?= $room['id'] ?>" method="post"
+              class="mt-3">
+              <input type="hidden" name="idR" value="<?= $room['id'] ?>">
+              <input type="hidden" name="idH" value="<?= $hotel['id'] ?>">
               <button type="submit" class="group cursor-pointer">
                 <svg
                   class="absolute inset-0 h-1/2 w-[50px] my-auto left-7/10 scale-50 text-red-500 group-hover:scale-100 transition-all duration-700 ease-out"

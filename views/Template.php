@@ -53,6 +53,19 @@
           </a>
           <p class="max-w-5xl mx-auto px-4 text-sm text-gray-400">Choose a hotel that you want to stay at.</p>
         </div>
+
+        <?php
+        $userName = 'Guest';
+        if (isset($user)) {
+          if (is_array($user) && isset($user['name']) && $user['name'] !== '') {
+            $userName = $user['name'];
+          } elseif (is_string($user) && $user !== '') {
+            $userName = $user;
+          }
+        }
+        ?>
+        <h1>Welcome <?= $userName ?></h1>
+
         <div class="flex gap-5">
           <?php
           $isLoggedIn = isset($_SESSION['user']) && !empty($_SESSION['user']);
@@ -79,6 +92,7 @@
         <div>
           <?= $content ?>
         </div>
+
       </div>
 
 
@@ -89,6 +103,7 @@
       <div class="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-gray-500">
         Website made with <span class="text-gray-300">PHP</span>, <span class="text-gray-300">HTML5</span>, and <span
           class="text-indigo-300">Tailwind CSS</span>.
+        <a class="py-2 px-5 border text-white border-white ml-5" href="<?= $rootWeb ?>about.php">About this website</a>
       </div>
     </footer>
   </div>

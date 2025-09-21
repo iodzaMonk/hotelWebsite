@@ -22,7 +22,21 @@ class View
   {
     $content = $this->generateFile($this->file, $data);
     $rootWeb = Configuration::get("Installation.rootWeb", "/");
-    $view = $this->generateFile('Views/Template.php', array('title' => $this->title, 'content' => $content, 'rootWeb' => $rootWeb));
+    $user = null;
+    if (is_array($data) && array_key_exists('user', $data)) {
+      $user = $data['user'];
+    } elseif (isset($_SESSION['user'])) {
+      $user = $_SESSION['user'];
+    }
+    $view = $this->generateFile(
+      'Views/Template.php',
+      array(
+        'title' => $this->title,
+        'content' => $content,
+        'rootWeb' => $rootWeb,
+        'user' => $user
+      )
+    );
     echo $view;
   }
 

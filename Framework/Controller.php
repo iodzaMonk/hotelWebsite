@@ -28,6 +28,9 @@ abstract class Controller
 
   protected function generateView($viewData = array())
   {
+    if ($this->request->getSession()->attributeExists('user')) {
+      $viewData['user'] = $this->request->getSession()->getAttribute('user');
+    }
     $classController = get_class($this);
     $controller = str_replace("Controller", "", $classController);
     $message = '';
@@ -36,7 +39,6 @@ abstract class Controller
       $this->request->getSession()->setAttribute("message", "");
     }
     $viewData['message'] = $message;
-    ;
 
     $view = new View($this->action, $controller);
     $view->generate($viewData);
@@ -48,22 +50,9 @@ abstract class Controller
     if (empty($rootWeb)) {
       $rootWeb = Configuration::get('rootWeb', '/');
     }
-    $rootWeb = rtrim($rootWeb, '/') . '/';
 
-    if ($controller !== null) {
-      $segments = [$controller];
-      if ($action !== null && $action !== '') {
-        $segments[] = $action;
-      }
-      foreach ($extraSegments as $segment) {
-        if ($segment === null || $segment === '') {
-          continue;
-        }
-        $segments[] = $segment;
-      }
-
-      $target = $rootWeb . implode('/', array_map('rawurlencode', $segments));
-      header('Location: ' . $target);
+    if ($controller != null) {
+      header('Location: ' . $rootWeb . $controller . "/" . $action);
     } else {
       header('Location: ' . $rootWeb);
     }
@@ -74,6 +63,3 @@ abstract class Controller
     return $this->request;
   }
 }
-
-
-

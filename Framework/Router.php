@@ -4,14 +4,22 @@ require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/Request.php';
 require_once __DIR__ . '/View.php';
 
-
 class Router
 {
 
   public function routerRequest()
   {
     try {
-      $request = new Request(array_merge($_GET, $_POST));
+      $parameters = array_merge($_GET, $_POST);
+
+      if (!isset($parameters['controller']) && isset($parameters['controleur'])) {
+        $parameters['controller'] = $parameters['controleur'];
+      }
+      if (!isset($parameters['action']) && isset($parameters['fonction'])) {
+        $parameters['action'] = $parameters['fonction'];
+      }
+
+      $request = new Request($parameters);
 
       $controller = $this->createController($request); // specific controller like ControllerHotel.php
       $action = $this->createAction($request); // the method we want to use in the specific controller
@@ -57,12 +65,11 @@ class Router
     }
     return $action;
   }
+
   private function errorControl(Exception $exception)
   {
     $view = new View('error');
     $error = $exception->getMessage();
     $view->generate(array('error' => $error));
   }
-
-
 }

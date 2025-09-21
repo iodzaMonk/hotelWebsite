@@ -15,6 +15,5 @@ $hotels = [
     'image_repo' => './public/images/Imaginary2.png',
   ]
 ];
-$view = new View('index', 'Hotels');
-$view->generate(['hotels' => $articles]);
-
+$view = new View('Hotels', 'Hotels');
+$view->generate(['hotels' => $hotels]);
