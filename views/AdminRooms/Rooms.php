@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 $title = 'Manage rooms';
 $roomsList = [];
 if (isset($rooms)) {
@@ -79,7 +79,7 @@ if (isset($rooms)) {
   <h1 class="text-5xl"><?= $hotel['hotel_name'] ?></h1>
   <p class="text-gray-400"><?= $hotel['hotel_address'] ?></p>
 
-  <form action="<?= Configuration::get('rootWeb','/') ?>AdminHotel/delete/<?= $hotel['id'] ?>" method="post">
+  <form action="<?= Configuration::get('rootWeb', '/') ?>AdminHotel/delete/<?= $hotel['id'] ?>" method="post">
     <button type="submit" class="group cursor-pointer absolute inset-0 h-1/2 w-[50px] my-auto left-9/10 text-red-500">
       <svg class="scale-50 group-hover:scale-100 transition-all duration-700 ease-out"
         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -110,7 +110,8 @@ if (isset($rooms)) {
             <p>Room nb: <span class="font-bold italic text-cyan-600">
                 <?= $room['room_nb'] ?></span>
             </p>
-            <form action="<?= Configuration::get('rootWeb','/') ?>AdminRoom/delete/<?= $room['id'] ?>/<?= $hotel['id'] ?>" method="post" class="mt-3">
+            <form action="<?= Configuration::get('rootWeb', '/') ?>AdminRoom/delete/<?= $room['id'] ?>/<?= $hotel['id'] ?>"
+              method="post" class="mt-3">
               <button type="submit" class="group cursor-pointer">
                 <svg
                   class="absolute inset-0 h-1/2 w-[50px] my-auto left-7/10 scale-50 text-red-500 group-hover:scale-100 transition-all duration-700 ease-out"
@@ -131,8 +132,7 @@ if (isset($rooms)) {
     <p class=" mt-6 text-center text-5xl text-gray-400">No rooms available yet.</p>
   <?php endif; ?>
 </div>
-<!-- <a href="index.php?controller=AdminRoom&action=add&id=<?= $id ?>"  -->
-<a href="<?= Configuration::get('rootWeb','/') ?>AdminRoom/add/<?= $id ?>"
+<a href="<?= Configuration::get('rootWeb', '/') ?>AdminRoom/add/<?= $id ?>"
   class="mt-20 inline-block rounded-lg px-20 py-3 font-medium bg-white/0 text-white border border-white/30 transition-all duration-300 transform-gpu scale-100 hover:scale-110 hover:ring-1 ease-out">
   Add new room
 </a>
