@@ -1,3 +1,4 @@
+<?php $rootWeb = $rootWeb ?: Configuration::get('rootWeb','/'); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,14 +10,14 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    @layer utilities {
-      .text-glow-red {
-        text-shadow:
-          0 0 5px rgba(239, 68, 68, 0.8),
-          0 0 10px rgba(239, 68, 68, 0.6),
-          0 0 20px rgba(239, 68, 68, 0.4);
-      }
+  @layer utilities {
+    .text-glow-red {
+      text-shadow:
+        0 0 5px rgba(239, 68, 68, 0.8),
+        0 0 10px rgba(239, 68, 68, 0.6),
+        0 0 20px rgba(239, 68, 68, 0.4);
     }
+  }
   </style>
 </head>
 
@@ -27,7 +28,7 @@
       <div class="max-w-5xl mx-auto px-4 py-6 flex items-center justify-between">
         <!-- Logo + Title -->
         <div class="flex flex-col">
-          <a href="<?= $rootWeb ?>index.php" class="group inline-flex items-baseline gap-3">
+          <a href="<?= $rootWeb ?>" class="group inline-flex items-baseline gap-3">
             <svg viewBox="-1.5 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor" stroke="currentColor"
               class="h-[25px] text-white my-auto">
@@ -52,13 +53,22 @@
           </a>
           <p class="max-w-5xl mx-auto px-4 text-sm text-gray-400">Choose a hotel that you want to stay at.</p>
         </div>
+        <div class="flex gap-5">
+          <?php
+          $isLoggedIn = isset($_SESSION['user']) && !empty($_SESSION['user']);
+          $adminHref = $isLoggedIn
+            ? $rootWeb . "Users/disconnect"
+            : $rootWeb . "Users/index";
+          $adminLabel = $isLoggedIn ? "Disconnect" : "Admin";
+          ?>
+          <a href="<?= $adminHref ?>"
+            class="px-5 bg-blue-800 border py-2 border-white/20 rounded cursor-pointer hover:scale-110 hover:bg-blue-700 shadow-none shadow-blue-700 hover:shadow-xl/15 transition-all duration-500 ease-in-out"><?= $adminLabel ?></a>
+          <form action="<?= $rootWeb ?>Hotel/search" method="get" class="flex items-center gap-2">
+            <input name="search" id="searching_bar" placeholder="Search hotel by name"
+              class="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm resize-none w-64 h-10 outline-0 focus:ring-2 focus:ring-cyan-500 transition-all ease-out duration-500 " />
+          </form>
+        </div>
         <!-- Search bar -->
-        <form action="index.php" method="get" class="flex items-center gap-2">
-          <input type="hidden" name="controller" value="hotel">
-          <input type="hidden" name="action" value="search">
-          <input name="search" id="searching_bar" placeholder="Search hotel by name"
-            class="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm resize-none w-64 h-10 outline-0 focus:ring-2 focus:ring-cyan-500 transition-all ease-out duration-500 " />
-        </form>
       </div>
     </header>
 
@@ -84,13 +94,13 @@
   </div>
 
   <script>
-    function closeModal() {
-      const root = document.getElementById('popup');
-      if (!root) return;
-      root.style.opacity = '0';
-      root.style.transition = 'opacity 200ms ease';
-      setTimeout(() => root.remove(), 200);
-    }
+  function closeModal() {
+    const root = document.getElementById('popup');
+    if (!root) return;
+    root.style.opacity = '0';
+    root.style.transition = 'opacity 200ms ease';
+    setTimeout(() => root.remove(), 200);
+  }
   </script>
 </body>
 

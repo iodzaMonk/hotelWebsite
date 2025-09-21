@@ -30,18 +30,42 @@ abstract class Controller
   {
     $classController = get_class($this);
     $controller = str_replace("Controller", "", $classController);
+    $message = '';
+    if ($this->request->getSession()->attributeExists("message")) {
+      $message = $this->request->getSession()->getAttribute("message");
+      $this->request->getSession()->setAttribute("message", "");
+    }
+    $viewData['message'] = $message;
+    ;
 
     $view = new View($this->action, $controller);
     $view->generate($viewData);
   }
 
-  protected function redirect($controller = null, $action = null)
+  protected function redirect($controller = null, $action = null, array $extraSegments = [])
   {
-    $rootWeb = Configuration::get("Installation.rootWeb", "/");
-    if ($controller != null) {
-      header("Location:" . $rootWeb . $controller . "/" . $action);
+    $rootWeb = Configuration::get("Installation.rootWeb");
+    if (empty($rootWeb)) {
+      $rootWeb = Configuration::get('rootWeb', '/');
+    }
+    $rootWeb = rtrim($rootWeb, '/') . '/';
+
+    if ($controller !== null) {
+      $segments = [$controller];
+      if ($action !== null && $action !== '') {
+        $segments[] = $action;
+      }
+      foreach ($extraSegments as $segment) {
+        if ($segment === null || $segment === '') {
+          continue;
+        }
+        $segments[] = $segment;
+      }
+
+      $target = $rootWeb . implode('/', array_map('rawurlencode', $segments));
+      header('Location: ' . $target);
     } else {
-      header("Location" . $rootWeb);
+      header('Location: ' . $rootWeb);
     }
   }
 
@@ -50,3 +74,6 @@ abstract class Controller
     return $this->request;
   }
 }
+
+
+

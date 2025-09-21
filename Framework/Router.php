@@ -25,11 +25,17 @@ class Router
 
   private function createController(Request $request)
   {
-    // $controller = Configuration::get("default"); // default controller
     $controller = "Hotel";
+    if ($request->getSession()->attributeExists("user")) {
+      $controller = 'Admin' . $controller;
+    }
     if ($request->parameterExists('controller')) {
       $controller = $request->getParameter('controller');
-      $controller = ucfirst(strtolower($controller));
+      $controller = preg_replace('/[^A-Za-z0-9]/', '', $controller);
+      if ($controller === '') {
+        throw new Exception("Invalid controller name provided.");
+      }
+      $controller = ucfirst($controller);
     }
     $classController = "Controller" . $controller;
     $fileController = "Controller/" . $classController . ".php";

@@ -44,39 +44,6 @@ class ControllerHotel extends Controller
     exit;
   }
 
-  public function create($name = null, $address = null)
-  {
-    $req = $this->getRequest();
-    if ($name === null)
-      $name = $req->parameterExists('name') ? $req->getParameter('name') : null;
-    if ($address === null)
-      $address = $req->parameterExists('address') ? $req->getParameter('address') : null;
-    $created = null;
-    if ($name && $address) {
-      $created = $this->hotel->addHotel($name, $address);
-      $this->hotels(null, $created);
-      exit;
-    } else {
-      $this->add('Please fill up both fields!');
-    }
-  }
-
-  public function add($error = null)
-  {
-    $view = new View("NewHotel", "Hotels");
-    $view->generate(['title' => 'Add a new hotel', 'error' => $error]);
-    exit;
-  }
-
-  public function delete($id = null)
-  {
-    if ($id === null) {
-      $req = $this->getRequest();
-      $id = $req->getParameterId('id');
-    }
-    $deleted = $this->hotel->deleteHotel($id);
-    $this->hotels(null, null, $deleted);
-  }
 
   public function search($name = null)
   {
