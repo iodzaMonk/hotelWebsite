@@ -1,13 +1,28 @@
-<?php $title = 'Hotels list'; ?>
+<?php
+$title = 'Hotels list';
+$searchQuery = isset($searchValue) ? trim((string) $searchValue) : '';
+$searchWasPerformed = !empty($searchPerformed);
+$hasHotels = !empty($hotels);
+?>
 
 <div>
 
-  <div class="flex flex-col justify-center items-center">
+  <div class="flex flex-col justify-center items-center gap-4">
     <?php if (!empty($error)) { ?>
       <p class="p-10 text-3xl"><?= $error ?></p>
     <?php } ?>
 
-    <?php if (!empty($hotels)) { ?>
+    <?php if ($searchWasPerformed) { ?>
+      <p class="text-sm text-gray-400">
+        <?php if ($hasHotels) { ?>
+          Showing <?= count($hotels) ?> result(s) for "<?= htmlspecialchars($searchQuery, ENT_QUOTES, 'UTF-8') ?>"
+        <?php } else { ?>
+          No hotels found for "<?= htmlspecialchars($searchQuery, ENT_QUOTES, 'UTF-8') ?>"
+        <?php } ?>
+      </p>
+    <?php } ?>
+
+    <?php if ($hasHotels) { ?>
       <?php foreach ($hotels as $hotel): ?>
         <a href="<?= Configuration::get('rootWeb', '/') ?>Hotel/hotel/<?= $hotel['id'] ?>" class="group block w-full">
           <div class="relative my-7 rounded-xl border border-gray-700 bg-gray-800 p-6 shadow-lg
@@ -33,6 +48,8 @@
           </div>
         </a>
       <?php endforeach; ?>
+    <?php } elseif ($searchWasPerformed) { ?>
+      <p class="text-lg text-gray-300">Try a different search term to find a hotel.</p>
     <?php } else { ?>
       <p class="text-5xl border p-5">There are no hotels yet</p>
     <?php } ?>

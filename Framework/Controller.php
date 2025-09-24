@@ -34,19 +34,14 @@ abstract class Controller
     $classController = get_class($this);
     $controller = str_replace("Controller", "", $classController);
     $message = '';
-    if ($this->request->getSession()->attributeExists("message")) {
-      $message = $this->request->getSession()->getAttribute("message");
-      $this->request->getSession()->setAttribute("message", "");
-    }
-    $viewData['message'] = $message;
 
     $view = new View($this->action, $controller);
     $view->generate($viewData);
   }
 
-  protected function redirect($controller = null, $action = null, array $extraSegments = [])
+  protected function redirect($controller = null, $action = null)
   {
-    $rootWeb = Configuration::get("Installation.rootWeb");
+    $rootWeb = Configuration::get("rootWeb");
     if (empty($rootWeb)) {
       $rootWeb = Configuration::get('rootWeb', '/');
     }

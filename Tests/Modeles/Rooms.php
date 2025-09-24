@@ -3,8 +3,8 @@
 require_once 'Models/Room.php';
 
 $testRoom = new Room();
-$roomsStmt = $testRoom->getRooms(2);
-$rooms = [];
+$roomsStmt = $testRoom->getRooms(3);
+$rooms = $roomsStmt->fetchAll();
 
 echo '<h3>Test  getRooms : </h3>';
 var_dump(count($rooms));

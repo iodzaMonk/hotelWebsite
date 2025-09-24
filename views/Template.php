@@ -66,7 +66,7 @@
         ?>
         <h1>Welcome <?= $userName ?></h1>
 
-        <div class="flex gap-5">
+        <div class="flex gap-5 items-center">
           <?php
           $isLoggedIn = isset($_SESSION['user']) && !empty($_SESSION['user']);
           $adminHref = $isLoggedIn
@@ -77,8 +77,12 @@
           <a href="<?= $adminHref ?>"
             class="px-5 bg-blue-800 border py-2 border-white/20 rounded cursor-pointer hover:scale-110 hover:bg-blue-700 shadow-none shadow-blue-700 hover:shadow-xl/15 transition-all duration-500 ease-in-out"><?= $adminLabel ?></a>
           <form action="<?= $rootWeb ?>Hotel/search" method="get" class="flex items-center gap-2">
-            <input name="search" id="searching_bar" placeholder="Search hotel by name"
-              class="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm resize-none w-64 h-10 outline-0 focus:ring-2 focus:ring-cyan-500 transition-all ease-out duration-500 " />
+            <label for="searching_bar" class="sr-only">Search hotels</label>
+            <input type="search" name="searchValue" id="searching_bar" placeholder="Search hotel by name"
+              value="<?= htmlspecialchars($searchValue ?? '', ENT_QUOTES, 'UTF-8') ?>"
+              class="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm resize-none w-64 h-10 outline-0 focus:ring-2 focus:ring-cyan-500 transition-all ease-out duration-500" />
+            <button type="submit"
+              class="px-3 py-2 h-10 bg-cyan-700 hover:bg-cyan-600 text-sm rounded border border-cyan-500/40 transition duration-300">Search</button>
           </form>
         </div>
         <!-- Search bar -->

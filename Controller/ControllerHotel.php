@@ -18,16 +18,45 @@ class ControllerHotel extends Controller
 
   public function index()
   {
-    $hotels = $this->hotel->getHotels();
+    $hotels = $this->hotel->getHotels()->fetchAll(PDO::FETCH_ASSOC);
     $view = new View("Hotels", "Hotels");
-    $view->generate(['hotels' => $hotels]);
+    $view->generate(['hotels' => $hotels, 'searchValue' => '', 'searchPerformed' => false]);
   }
 
   public function hotels($error = null, $created = null, $deleted = null)
   {
-    $hotels = $this->hotel->getHotels();
+    $hotels = $this->hotel->getHotels()->fetchAll(PDO::FETCH_ASSOC);
     $view = new View("Hotels", "Hotels");
-    $view->generate(['hotels' => $hotels, 'created' => $created, 'deleted' => $deleted]);
+    $view->generate([
+      'hotels' => $hotels,
+      'created' => $created,
+      'deleted' => $deleted,
+      'error' => $error,
+      'searchValue' => '',
+      'searchPerformed' => false
+    ]);
+    exit;
+  }
+
+  public function search()
+  {
+    $request = $this->getRequest();
+    $searchValue = '';
+    if ($request->parameterExists('searchValue')) {
+      $searchValue = trim($request->getParameter('searchValue'));
+    }
+
+    $resultsStmt = $searchValue === ''
+      ? $this->hotel->getHotels()
+      : $this->hotel->getHotelsByName($searchValue);
+    $hotels = $resultsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $view = new View("Hotels", "Hotels");
+    $view->generate([
+      'hotels' => $hotels,
+      'searchValue' => $searchValue,
+      'searchPerformed' => true
+    ]);
     exit;
   }
 
@@ -40,26 +69,14 @@ class ControllerHotel extends Controller
     $hotel = $this->hotel->getHotel_by_id($idHotel);
     $rooms = $this->room->getRooms($idHotel);
     $view = new View("Rooms", "Rooms");
-    $view->generate(['hotel' => $hotel, 'rooms' => $rooms, 'error' => $error, 'id' => $idHotel, 'created' => $created, 'deleted' => $deleted]);
+    $view->generate([
+      'hotel' => $hotel,
+      'rooms' => $rooms,
+      'error' => $error,
+      'id' => $idHotel,
+      'created' => $created,
+      'deleted' => $deleted
+    ]);
     exit;
   }
-
-
-  public function search($name = null)
-  {
-    if ($name === null) {
-      $req = $this->getRequest();
-      $name = $req->parameterExists('search') ? $req->getParameter('search') : '';
-    }
-    $hotels = $this->hotel->getHotelsByName($name);
-    $view = new View("Hotels", "Hotels");
-    if ($hotels->rowCount() === 0) {
-      $view->generate(['error' => 'There are no hotels with this name']);
-      exit;
-    } else {
-      $view->generate(['hotels' => $hotels]);
-      exit;
-    }
-  }
-
 }

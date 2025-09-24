@@ -11,14 +11,6 @@ class Router
   {
     try {
       $parameters = array_merge($_GET, $_POST);
-
-      if (!isset($parameters['controller']) && isset($parameters['controleur'])) {
-        $parameters['controller'] = $parameters['controleur'];
-      }
-      if (!isset($parameters['action']) && isset($parameters['fonction'])) {
-        $parameters['action'] = $parameters['fonction'];
-      }
-
       $request = new Request($parameters);
 
       $controller = $this->createController($request); // specific controller like ControllerHotel.php
@@ -33,13 +25,13 @@ class Router
 
   private function createController(Request $request)
   {
-    $controller = "Hotel";
+    $controller = "Hotel"; // default controller
     if ($request->getSession()->attributeExists("user")) {
       $controller = 'Admin' . $controller;
     }
     if ($request->parameterExists('controller')) {
       $controller = $request->getParameter('controller');
-      $controller = preg_replace('/[^A-Za-z0-9]/', '', $controller);
+      // $controller = preg_replace('/[^A-Za-z0-9]/', '', $controller);
       if ($controller === '') {
         throw new Exception("Invalid controller name provided.");
       }

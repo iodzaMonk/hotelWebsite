@@ -21,20 +21,34 @@ class View
   public function generate($data = null)
   {
     $content = $this->generateFile($this->file, $data);
-    $rootWeb = Configuration::get("Installation.rootWeb", "/");
+    $rootWeb = Configuration::get("rootWeb", "/");
     $user = null;
     if (is_array($data) && array_key_exists('user', $data)) {
       $user = $data['user'];
     } elseif (isset($_SESSION['user'])) {
       $user = $_SESSION['user'];
     }
+
+    $searchValue = '';
+    $searchPerformed = false;
+    if (is_array($data)) {
+      if (array_key_exists('searchValue', $data) && $data['searchValue'] !== null) {
+        $searchValue = (string) $data['searchValue'];
+      }
+      if (array_key_exists('searchPerformed', $data)) {
+        $searchPerformed = (bool) $data['searchPerformed'];
+      }
+    }
+
     $view = $this->generateFile(
       'Views/Template.php',
       array(
         'title' => $this->title,
         'content' => $content,
         'rootWeb' => $rootWeb,
-        'user' => $user
+        'user' => $user,
+        'searchValue' => $searchValue,
+        'searchPerformed' => $searchPerformed
       )
     );
     echo $view;
@@ -57,10 +71,5 @@ class View
     } else {
       throw new Exception("File '$file' not found!");
     }
-  }
-
-  private function clean($value)
-  {
-    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
   }
 }
